@@ -119,6 +119,16 @@
         "type": "runjs",
         "target": "jd_big_winner.js"
       }
+    },
+    {
+      "name": "取关京东店铺和商品",
+      "type": "cron",
+      "time": "55 23 * * *",
+      "running": true,
+      "job": {
+        "type": "runjs",
+        "target": "jd_unsubscribe.js"
+      }
     }
   ]
 }
