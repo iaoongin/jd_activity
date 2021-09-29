@@ -1,0 +1,1 @@
+ps aux | grep 'node jd_task.js' | head -n 1
