@@ -8,6 +8,11 @@ export WECOMCHAN_URL=
 
 # jd cookie
 export JD_COOKIE="pt_key=%;pt_pin=%"
+
+# web token 默认：123
+export JD_ACTIVITY_WEB_TOKEN=123
+```
+
 ```
 
 # 执行
