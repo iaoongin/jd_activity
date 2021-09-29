@@ -1,0 +1,1 @@
+exports.WebToken = process.env.JD_ACTIVITY_WEB_TOKEN || '123';
