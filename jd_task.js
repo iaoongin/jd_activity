@@ -45,5 +45,5 @@ function log(message) {
 
 function execTask(task) {
     // exec(`node ${task.job.target}`, (error, stdout) => console.log(stdout))
-    exec(`node ${task.job.target}`)
+    exec(`node ${jd_task.path}/${task.job.target}`)
 }

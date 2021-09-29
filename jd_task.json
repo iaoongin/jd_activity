@@ -1,5 +1,6 @@
 {
   "name": "京东定时任务",
+  "path": "activity",
   "list": [
     {
       "name": "京东资产变动通知",
