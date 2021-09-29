@@ -22,7 +22,7 @@ function handleTaskInfo(request, response) {
     let jd_task_rawdata = fs.readFileSync('jd_task.json');
     // let jd_task = JSON.parse(jd_task_rawdata);
 
-    response.writeHeader(404, {
+    response.writeHeader(200, {
         "Content-Type": "application/json; charset=utf-8",
     });
     response.end(jd_task_rawdata);
@@ -34,7 +34,7 @@ function handleJDUserInfo(request, response) {
     let jd_task_rawdata = fs.readFileSync('jd_task.json');
     // let jd_task = JSON.parse(jd_task_rawdata);
 
-    response.writeHeader(404, {
+    response.writeHeader(200, {
         "Content-Type": "application/json; charset=utf-8",
     });
     response.end(jd_task_rawdata);

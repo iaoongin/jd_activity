@@ -63,6 +63,11 @@ function writeErrorPage(response, errorType) {
 
 function authCheck(request, response) {
     var pathName = url.parse(request.url).pathname;
+
+    if(!pathName.startsWith('/api')){
+        return true;
+    }
+
     let token = request && request.query ? request.query.token : ''
     if (!token) {
         // console.log(request.headers)
