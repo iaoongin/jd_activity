@@ -4,6 +4,7 @@
   "description": "",
   "main": "JS_USER_AGENTS.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "cron": "^1.8.2",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
