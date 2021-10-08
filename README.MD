@@ -11,6 +11,9 @@ export JD_COOKIE="pt_key=%;pt_pin=%"
 
 # web token 默认：123
 export JD_ACTIVITY_WEB_TOKEN=123
+
+# github gist
+export JD_ACTIVITY_GIST_TOKEN=xxx
 ```
 
 ```

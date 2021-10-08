@@ -7,27 +7,18 @@ const { Column, ColumnGroup } = Table;
 const data = [
   {
     key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
+    pt_pin: 'John',
+    pt_key: 'Brown',
   },
   {
     key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
+    pt_pin: 'Jim',
+    pt_key: 'Green',
   },
   {
     key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
+    pt_pin: 'Joe',
+    pt_key: 'Black',
   },
 ];
 
@@ -37,15 +28,23 @@ export default class TaskInfo extends React.Component {
     }
   
     render() {
+
       return (
         <Table dataSource={data}>
-        <ColumnGroup title="Name">
+       {/*  <ColumnGroup title="Name">
           <Column title="First Name" dataIndex="firstName" key="firstName" />
           <Column title="Last Name" dataIndex="lastName" key="lastName" />
-        </ColumnGroup>
-        <Column title="Age" dataIndex="age" key="age" />
-        <Column title="Address" dataIndex="address" key="address" />
-        <Column
+        </ColumnGroup> */}
+        <Column title="pt_pin" dataIndex="pt_pin" key="pt_pin" />
+        <Column title="pt_key" dataIndex="pt_key" key="pt_key" />
+        <Column title="昵称" dataIndex="nickname" key="nickname" render={
+          text => {
+            if(!text) return '-'
+            return text
+          }
+
+        }/>
+        {/* <Column
           title="Tags"
           dataIndex="tags"
           key="tags"
@@ -58,8 +57,8 @@ export default class TaskInfo extends React.Component {
               ))}
             </>
           )}
-        />
-        <Column
+        /> */}
+        {/* <Column
           title="Action"
           key="action"
           render={(text, record) => (
@@ -68,7 +67,7 @@ export default class TaskInfo extends React.Component {
               <a>Delete</a>
             </Space>
           )}
-        />
+        /> */}
       </Table>
       )
     }

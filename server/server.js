@@ -6,6 +6,10 @@ const cors = require("cors");
 const app = express();
 const auth = require("./auth.js");
 
+
+const { Octokit } = require("octokit");
+const octokit = new Octokit({ auth: auth.GistsToken });
+
 const port = 3001;
 
 function handleHello(request, response) {
@@ -24,17 +28,24 @@ function handleAuthInfo(request, response) {
   response.end();
 }
 
-function handleTaskInfo(request, response) {
-  let jd_task_rawdata = fs.readFileSync("jd_task.json");
+async function handleTaskInfo(request, response) {
+  // let jd_task_rawdata = fs.readFileSync("jd_task.json");
   // let jd_task = JSON.parse(jd_task_rawdata);
+
+  let gists = await octokit.request('GET /gists')
+
+  console.log(gists)
 
   response.writeHeader(200, {
     "Content-Type": "application/json; charset=utf-8",
   });
-  response.end(jd_task_rawdata);
+  response.end(gists);
 }
 
 function handleJDUserInfo(request, response) {
+
+
+
   let jd_task_rawdata = fs.readFileSync("jd_task.json");
   // let jd_task = JSON.parse(jd_task_rawdata);
 
