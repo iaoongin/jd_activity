@@ -4,11 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const app = express();
-const auth = require("./auth.js");
 
-
-const { Octokit } = require("octokit");
-const octokit = new Octokit({ auth: auth.GistsToken });
+import("./service/jdUserInfo.js");
+import("./service/jdTaskInfo.js");
+// import("./service");
 
 const port = 3001;
 
@@ -22,50 +21,19 @@ function handleHello(request, response) {
   response.end();
 }
 
-function handleAuthInfo(request, response) {
-  var r = { data: { username: auth.WebInfo}, code: "200" };
-  response.json(r);
-  response.end();
-}
-
-async function handleTaskInfo(request, response) {
-  // let jd_task_rawdata = fs.readFileSync("jd_task.json");
-  // let jd_task = JSON.parse(jd_task_rawdata);
-
-  let gists = await octokit.request('GET /gists')
-
-  console.log(gists)
-
-  response.writeHeader(200, {
-    "Content-Type": "application/json; charset=utf-8",
-  });
-  response.end(gists);
-}
-
-function handleJDUserInfo(request, response) {
-
-
-
-  let jd_task_rawdata = fs.readFileSync("jd_task.json");
-  // let jd_task = JSON.parse(jd_task_rawdata);
-
-  response.writeHeader(200, {
-    "Content-Type": "application/json; charset=utf-8",
-  });
-  response.end(jd_task_rawdata);
-}
-
 router.get("/api/hello", handleHello);
-router.get("/api/taskInfo", handleTaskInfo);
-router.get("/api/auth/info", handleAuthInfo);
-router.get("/api/jdUserInfo", handleJDUserInfo);
 
 app.use(cors());
-app.use(router);
+
 
 // 配置 mplat 渲染页面
 // app.set('mplat', path.join(__dirname, 'views/mplat'))
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.json())  //body-parser 解析json格式数据 
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.use(router);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
