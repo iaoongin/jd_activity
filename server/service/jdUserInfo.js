@@ -1,14 +1,24 @@
 const { loadData, updateData } = require("../gists.js");
 const router = require("../router.js");
 const { now } = require("../utils/date.js");
+const { queryJdUserInfo } = require("./jdApi");
 
 /**
  *  查询jd用户信息
  */
 router.get("/api/jdUserInfo", async (request, response) => {
   let data = await loadData();
+  let jd_token = data.jd_token
+  // console.log(jd_token);
+  for (let item of jd_token) {
+    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`
+    let resp = await queryJdUserInfo(cookie)
+    // console.log(resp);
+    item.jd = resp.data.base
+  }
 
-  var r = { data: data.jd_token, code: "200" };
+
+  var r = { data: jd_token, code: "200" };
   response.json(r);
   response.end();
 });

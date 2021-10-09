@@ -1,6 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { EditableProTable } from "@ant-design/pro-table";
-import { getJdUserInfo, updateJdUserInfo,deleteJdUserInfo } from "../apis/jdUserInfo.js";
+import {
+  getJdUserInfo,
+  updateJdUserInfo,
+  deleteJdUserInfo,
+} from "../apis/jdUserInfo.js";
+import {Avatar} from 'antd'
 
 export default class TaskInfo extends React.Component {
   constructor(props) {
@@ -12,8 +17,8 @@ export default class TaskInfo extends React.Component {
         {
           title: "pt_pin",
           dataIndex: "pt_pin",
-          editable: false,
-          width: '10%'
+          editable: true,
+          width: "10%",
         },
         {
           title: "pt_key",
@@ -22,15 +27,20 @@ export default class TaskInfo extends React.Component {
           render: (_, record) => <code>{record.pt_key}</code>,
         },
         {
-          title: "昵称",
-          dataIndex: "nickname",
+          title: "用户",
           editable: false,
-          width: '10%'
-        }, {
+          width: "13%",
+          render: (text, record, _, action) => [
+            <Avatar size={32} src={record?.jd?.headImageUrl} />,
+            <span>&nbsp;</span>,
+            <span>{record?.jd?.nickname}</span>
+          ]
+        },
+        {
           title: "更新时间",
           dataIndex: "update_at",
           editable: false,
-          width: '15%'
+          width: "15%",
         },
         {
           title: "操作",
@@ -48,9 +58,9 @@ export default class TaskInfo extends React.Component {
             </a>,
             <a
               key="delete"
-              onClick={async() => {
-                let del = await deleteJdUserInfo([record.id])
-                if(del?.code == 200){
+              onClick={async () => {
+                let del = await deleteJdUserInfo([record.id]);
+                if (del?.code == 200) {
                   this.setState({ data: this.formatData(del.data) });
                 }
               }}
@@ -59,9 +69,8 @@ export default class TaskInfo extends React.Component {
             </a>,
           ],
         },
-      ]
+      ],
     };
-
   }
 
   render() {
