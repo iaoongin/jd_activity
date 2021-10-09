@@ -7,6 +7,7 @@ const app = express();
 
 import("./service/jdUserInfo.js");
 import("./service/jdTaskInfo.js");
+import("./service/authInfo.js");
 // import("./service");
 
 const port = 3001;
