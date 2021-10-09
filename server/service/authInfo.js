@@ -1,6 +1,6 @@
 const { loadData, updateData } = require("../gists.js");
 const router = require("../router.js");
-const auth = require("./auth.js");
+const auth = require("../auth.js");
 
 /**
  *  查询jd 任务信息
