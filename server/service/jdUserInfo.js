@@ -1,6 +1,6 @@
 const { loadData, updateData } = require("../gists.js");
 const router = require("../router.js");
-const moment = require('moment');
+const { now } = require("../utils/date.js");
 
 /**
  *  查询jd用户信息
@@ -32,7 +32,7 @@ router.post("/api/jdUserInfo", async (request, response) => {
     }
 
     let match = false;
-    let updateAt = moment().format('YYY-MM-DD HH:mm:ss')
+    let updateAt = now()
     for (let itemDb of data) {
       //   console.log("itemDb", itemDb);
       if (itemDb.pt_pin == item.pt_pin) {

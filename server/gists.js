@@ -1,7 +1,5 @@
-
-const moment = require('moment');
-
 const auth = require("./auth.js");
+const { now } = require("./utils/date.js");
 const { Octokit } = require("octokit");
 const octokit = new Octokit({ auth: auth.GistsToken });
 
@@ -16,8 +14,7 @@ module.exports.loadData = async () => {
 };
 
 module.exports.updateData = async (data) => {
-
-  data.updateAt = moment().format('YYY-MM-DD HH:mm:ss')
+  data.updateAt = now();
 
   let gistResp = await octokit.request("PATCH /gists/{gist_id}", {
     gist_id: auth.GistId,
