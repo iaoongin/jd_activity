@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import TaskInfo from "./pages/TaskInfo";
+import JdUserInfo from "./pages/JdUserInfo";
+import JdTaskInfo from "./pages/JdTaskInfo";
 import { Row, Col } from "antd";
 import MyMenu from "./components/MyMenu";
 
@@ -13,8 +14,9 @@ const SubRoute = () => {
         xxl={{ span: 18, offset: 3 }}
       >
         <MyMenu />
-        {/* <Route exact path="/" component={Charts} /> */}
-        <Route exact path="/" component={TaskInfo} />
+        <Route exact path="/" component={JdUserInfo} /> 
+        <Route exact path="/userInfo" component={JdUserInfo} /> 
+        <Route exact path="/taskInfo" component={JdTaskInfo} />
       </Col>
     </Row>
   );

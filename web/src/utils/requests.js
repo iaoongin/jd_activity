@@ -32,6 +32,9 @@ axios.interceptors.request.use(
       token = localStorage.getItem(TOKEN_KEY);
     }
     // debugger
+
+    token = 123
+
     config.headers.common[HttpHeaderAuthorization] = TOKEN_PREFIX + token;
     return config;
   },
@@ -46,7 +49,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   resp => {
     hideLoading();
-    console.log(resp);
+    // console.log(resp);
     const { code, msg } = resp.data;
 
     if (code === "200") {

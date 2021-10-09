@@ -6,6 +6,7 @@ const router = require("../router.js");
  */
 router.get("/api/jdTaskInfo", async (request, response) => {
   let data = await loadData();
-  response.json(data.jd_task_info);
+  var r = { data: data.jd_task_info, code: "200" };
+  response.json(r);
   response.end();
 });
