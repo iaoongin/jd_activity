@@ -5,7 +5,7 @@ import {
   getToken,
   TOKEN_PREFIX,
   HttpHeaderAuthorization,
-  TOKEN_KEY
+  TOKEN_KEY,
 } from "./auth";
 import { getUrlParam, urlParamDel } from "./urls";
 import { hideLoading, showLoading } from "../store";
@@ -15,11 +15,11 @@ import lodash from "lodash";
 let base =
   process.env.NODE_ENV == "production" ? process.env.REACT_APP_SERVICE_URL : "";
 
-axios.defaults.baseURL = base; 
+axios.defaults.baseURL = base;
 
 // 请求前拦截
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     showLoading();
     let token = getUrlParam(TOKEN_KEY);
     if (token) {
@@ -36,18 +36,19 @@ axios.interceptors.request.use(
     config.headers.common[HttpHeaderAuthorization] = TOKEN_PREFIX + token;
     return config;
   },
-  err => {
+  (err) => {
     console.log("请求超时");
     hideLoading();
     return Promise.reject(err);
   }
 );
 
+let promptFlag = false;
 // 返回后拦截
 axios.interceptors.response.use(
-  resp => {
+  (resp) => {
     hideLoading();
-    // console.log(resp);
+    console.log(resp);
     const { code, msg } = resp.data;
 
     if (code === "200") {
@@ -66,12 +67,21 @@ axios.interceptors.response.use(
       console.log(newHref);
       window.location.href = newHref;
       return Promise.reject("登录信息失效⊙﹏⊙∥");
+    } else if (code == "403") {
+      if(!promptFlag){
+        promptFlag = true;
+        let iptToken = window.prompt("请输入token");
+        localStorage.setItem("token", iptToken);
+        promptFlag = false
+        window.location.reload();
+      }
+      
     } else {
       message.error(msg);
       return Promise.reject(msg);
     }
   },
-  err => {
+  (err) => {
     hideLoading();
     console.log(JSON.parse(JSON.stringify(err)));
     // console.log(typeof err);
@@ -89,8 +99,8 @@ const postRequestBody = (url, params) => {
     data: params,
     headers: {
       "Content-Type": "application/json",
-      charset: "utf-8"
-    }
+      charset: "utf-8",
+    },
   });
 };
 
@@ -101,25 +111,25 @@ const postRequestParam = (url, params) => {
     url: `${base}${url}`,
     data: params,
     transformRequest: [
-      function(data) {
+      function (data) {
         let ret = "";
         for (let it in data) {
           ret +=
             encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
         }
         return ret;
-      }
+      },
     ],
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
   });
 };
 
-const get = url => {
+const get = (url) => {
   return axios({
     method: "get",
-    url: `${base}${url}`
+    url: `${base}${url}`,
   });
 };
 
@@ -127,11 +137,11 @@ const getUrlParams = (url, params) => {
   return axios({
     method: "get",
     url: `${base}${url}`,
-    params: params
+    params: params,
   });
 };
 
-const multiple = function(requsetArray, callback) {
+const multiple = function (requsetArray, callback) {
   axios.all(requsetArray).then(axios.spread(callback));
 };
 
@@ -140,7 +150,7 @@ const http = {
   get,
   getUrlParams,
   postRequestParam,
-  postRequestBody
+  postRequestBody,
 };
 
 Component.prototype.get = get;
