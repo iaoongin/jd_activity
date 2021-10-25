@@ -1,1 +1,3 @@
-ps aux | grep 'node jd_task.js' | head -n 1 | awk '{print $2}' | xargs kill
+ps aux | grep 'node jd_task.js' | awk '{print $2}' | xargs kill
+ps aux | grep 'node server/server.js' | awk '{print $2}' | xargs kill
+ps aux | grep 'jd_activity/web' | awk '{print $2}' | xargs kill
