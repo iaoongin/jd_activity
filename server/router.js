@@ -13,52 +13,20 @@ function getErrorInfo(errorType) {
 function writeErrorPage(response, errorType) {
 
   if (errorType == 'NOT_FOUND') {
-    response.writeHeader(404, {
-      "Content-Type": "text/html"
-    });
-    response.end(`
-            <html>
-              <head>
-                <title>NOT FOUND</title>
-              </head>
-              <body>
-                <h1>404 NOT FOUND</h1>
-              </body>
-            </html>
-          `);
-
+    var r = { msg: errorType, code: "404" };
+    response.json(r);
+    response.end();
     return
   } else if (errorType === 'NO_AUTH') {
-    response.writeHeader(403, {
-      "Content-Type": "text/html"
-    });
-    response.end(`
-            <html>
-              <head>
-                <title>NOT AUTH</title>
-              </head>
-              <body>
-                <h1>404 NOT AUTH</h1>
-              </body>
-            </html>
-          `);
-
+    var r = { msg: errorType, code: "403" };
+    response.json(r);
+    response.end();
     return
   }
 
-  response.writeHeader(500, {
-    "Content-Type": "text/html"
-  });
-  response.end(`
-        <html>
-          <head>
-            <title>SERVER ERROR</title>
-          </head>
-          <body>
-            <h1>SERVER ERROR</h1>
-          </body>
-        </html>
-      `);
+  var r = { msg: 'SERVER ERROR', code: "500" };
+  response.json(r);
+  response.end();
 }
 
 function authCheck(request, response) {

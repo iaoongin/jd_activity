@@ -20,7 +20,7 @@ export function logout() {
 export function getInfo() {
     return http.axios({
         // url: '/api/auth/getInfo',
-        url: '/api/auth/info?token=123',
+        url: '/api/auth/info',
         method: 'get'
     })
 }
