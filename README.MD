@@ -6,7 +6,7 @@ export WECOMCHAN_SEND_KEY=
 # 通知地址
 export WECOMCHAN_URL=
 
-# jd cookie
+# jd cookie；可不填，从gist数据中 获取；否则将使用本数据
 export JD_COOKIE="pt_key=%;pt_pin=%"
 
 # web token 默认：123

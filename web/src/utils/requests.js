@@ -33,8 +33,6 @@ axios.interceptors.request.use(
     }
     // debugger
 
-    token = 123
-
     config.headers.common[HttpHeaderAuthorization] = TOKEN_PREFIX + token;
     return config;
   },
