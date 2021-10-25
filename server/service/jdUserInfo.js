@@ -8,15 +8,25 @@ const { queryJdUserInfo } = require("./jdApi");
  */
 router.get("/api/jdUserInfo", async (request, response) => {
   let data = await loadData();
-  let jd_token = data.jd_token
+  let jd_token = data.jd_token;
   // console.log(jd_token);
   for (let item of jd_token) {
-    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`
-    let resp = await queryJdUserInfo(cookie)
+    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
+    let resp = await queryJdUserInfo(cookie);
     // console.log(resp);
-    item.jd = resp.data.base
-  }
+    let key = item.pt_key;
+    let keyLen = key.length;
+    let showLen = 5;
+    let encryptKey = ""
+    encryptKey = key.substring(0, showLen);
+    for (let i = 0; i < keyLen - 2 * showLen; i++) {
+      encryptKey += "*";
+    }
+    encryptKey += key.substring(key.length - showLen);
 
+    item.pt_key = encryptKey
+    item.jd = resp.data.base;
+  }
 
   var r = { data: jd_token, code: "200" };
   response.json(r);
@@ -37,12 +47,12 @@ router.post("/api/jdUserInfo", async (request, response) => {
   for (let item of pinKeys) {
     // console.log("item", item);
 
-    if(!item || !item.pt_pin || !item.pt_key){
+    if (!item || !item.pt_pin || !item.pt_key) {
       continue;
     }
 
     let match = false;
-    let updateAt = now()
+    let updateAt = now();
     for (let itemDb of data) {
       //   console.log("itemDb", itemDb);
       if (itemDb.pt_pin == item.pt_pin) {
@@ -81,7 +91,7 @@ router.delete("/api/jdUserInfo", async (request, response) => {
 
   let dataForSave = await loadData();
   let data = dataForSave.jd_token;
-  let newJdToken = data.filter(x=> !(pins.includes(x.pt_pin)))
+  let newJdToken = data.filter((x) => !pins.includes(x.pt_pin));
 
   console.log(newJdToken);
   dataForSave.jd_token = newJdToken;
