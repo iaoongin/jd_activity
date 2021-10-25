@@ -16,11 +16,10 @@ export JD_ACTIVITY_WEB_TOKEN=123
 export JD_ACTIVITY_GIST_TOKEN=xxx
 ```
 
-```
-
 # 执行
 
 启动
+
 ```bash
 ./run.sh
 ```
