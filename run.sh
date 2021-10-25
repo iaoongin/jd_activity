@@ -4,5 +4,13 @@ npm config set registry http://registry.npm.taobao.org
 
 npm install
 
-nohup node jd_task.js > log.txt &
+# task
+nohup node jd_task.js > task_log.txt &
 
+# server
+nohup node server/server.js > server_log.txt &
+
+# web
+cd web
+npm install
+nohup npm start > ../web_log.txt &
