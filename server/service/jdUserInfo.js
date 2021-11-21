@@ -3,6 +3,21 @@ const router = require("../router.js");
 const { now } = require("../utils/date.js");
 const { queryJdUserInfo } = require("./jdApi");
 
+function encryptKey(item) {
+  let key = item.pt_key;
+  let keyLen = key.length;
+  let showLen = 5;
+  let encryptKey = ""
+  encryptKey = key.substring(0, showLen);
+  for (let i = 0; i < keyLen - 2 * showLen; i++) {
+    encryptKey += "*";
+  }
+  encryptKey += key.substring(key.length - showLen);
+
+  item.pt_key = encryptKey
+  
+}
+
 /**
  *  查询jd用户信息
  */
@@ -14,17 +29,7 @@ router.get("/api/jdUserInfo", async (request, response) => {
     let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
     let resp = await queryJdUserInfo(cookie);
     // console.log(resp);
-    let key = item.pt_key;
-    let keyLen = key.length;
-    let showLen = 5;
-    let encryptKey = ""
-    encryptKey = key.substring(0, showLen);
-    for (let i = 0; i < keyLen - 2 * showLen; i++) {
-      encryptKey += "*";
-    }
-    encryptKey += key.substring(key.length - showLen);
-
-    item.pt_key = encryptKey
+    encryptKey(item)
     item.jd = resp.data.base;
   }
 
@@ -69,12 +74,17 @@ router.post("/api/jdUserInfo", async (request, response) => {
         pt_key: item.pt_key,
       });
     }
+
   }
 
   //   console.log("new", data);
 
   dataForSave.jd_token = data;
   updateData(dataForSave);
+
+  for(let item of data){
+    encryptKey(item)
+  }
 
   var r = { data: data, code: "200" };
   response.json(r);
@@ -98,6 +108,9 @@ router.delete("/api/jdUserInfo", async (request, response) => {
   updateData(dataForSave);
 
   var r = { data: newJdToken, code: "200" };
+  for(let item of data){
+    encryptKey(item)
+  }
   response.json(r);
   response.end();
 });
