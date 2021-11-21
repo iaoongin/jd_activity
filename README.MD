@@ -13,6 +13,8 @@ export JD_COOKIE="pt_key=%;pt_pin=%"
 export JD_ACTIVITY_WEB_TOKEN=123
 
 # github gist
+export JD_ACTIVITY_GIST_ID=xxx
+
 export JD_ACTIVITY_GIST_TOKEN=xxx
 ```
 
