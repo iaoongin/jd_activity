@@ -6,7 +6,7 @@ const octokit = new Octokit({ auth: auth.GistsToken });
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { window } = new JSDOM(`<!DOCTYPE html>`);
-const $ = require("jQuery")(window);
+const $ = require("jquery")(window);
 
 module.exports.loadData = async () => {
   let gistResp = await octokit.request("GET /gists/{gist_id}", {
