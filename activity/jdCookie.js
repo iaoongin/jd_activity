@@ -1,4 +1,4 @@
-(async () => {
+/* async */ (() => {
   /*
 此文件为Node.js专用。其他用户请忽略
  */
@@ -20,15 +20,18 @@
     }
   } else {
     // 从gist 拉取
-    const { loadData } = require("../server/gists.js");
-    let data = await loadData();
+    const { loadDataSync } = require("../server/gists.js");
+
+    let data = loadDataSync();
+    // console.log(data);
     let jd_token = data.jd_token;
     for (let item of jd_token) {
       CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin}`);
     }
-
-    console.log(CookieJDs);
   }
+
+  console.log(CookieJDs);
+
   /*
   if (JSON.stringify(process.env).indexOf('GITHUB')>-1) {
     console.log(`请勿使用github action运行此脚本,无论你是从你自己的私库还是其他哪里拉取的源代码，都会导致我被封号\n`);
@@ -51,6 +54,7 @@
   );
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false")
     console.log = () => {};
+
   for (let i = 0; i < CookieJDs.length; i++) {
     const index = i + 1 === 1 ? "" : i + 1;
     exports["CookieJD" + index] = CookieJDs[i].trim();
