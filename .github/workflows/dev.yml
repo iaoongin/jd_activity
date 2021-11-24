@@ -34,6 +34,7 @@ jobs:
         run: |
           echo 开始构建!
           cd web
+          yarn
           yarn build
           
       - name: 部署到 GitHub Pages
