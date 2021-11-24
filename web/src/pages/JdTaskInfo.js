@@ -43,6 +43,7 @@ export default class TaskInfo extends React.Component {
       data.map((x) => {
         x.key = idx;
         idx++;
+        return x;
       });
       this.setState({ data: data });
     });

@@ -116,6 +116,7 @@ export default class TaskInfo extends React.Component {
     data.map((x) => {
       x.key = x.pt_pin;
       x.id = x.pt_pin;
+      return x;
     });
 
     return data;
