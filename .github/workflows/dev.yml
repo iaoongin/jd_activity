@@ -28,8 +28,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: c-hive/gha-yarn-cache@v2
-      with:
-        directory: web # Optional, speficy the folder of yarn.lock if not in the root directory
+        with:
+          directory: web # Optional, speficy the folder of yarn.lock if not in the root directory
 
       # 开始
       - name: 开始
@@ -40,8 +40,7 @@ jobs:
         run: |
           echo 开始构建!
           cd web
-          yarn config set registry https://registry.npm.taobao.org/ -g
-          yarn
+          yarn install
           yarn build
           
       - name: 部署到 GitHub Pages
