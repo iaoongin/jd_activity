@@ -5,7 +5,7 @@ import {
   updateJdUserInfo,
   deleteJdUserInfo,
 } from "../apis/jdUserInfo.js";
-import {Avatar} from 'antd'
+import { Avatar, Button } from "antd";
 
 export default class TaskInfo extends React.Component {
   constructor(props) {
@@ -27,14 +27,24 @@ export default class TaskInfo extends React.Component {
           render: (_, record) => <code>{record.pt_key}</code>,
         },
         {
+          title: "有效",
+          editable: false,
+          width: "4%",
+          render: (text, record, _, action) => {
+            let valid = !!record?.jd?.nickname;
+            // console.log(valid);
+            return <span>{valid + ""}</span>;
+          },
+        },
+        {
           title: "用户",
           editable: false,
           width: "13%",
           render: (text, record, _, action) => [
             <Avatar size={32} src={record?.jd?.headImageUrl} />,
             <span>&nbsp;</span>,
-            <span>{record?.jd?.nickname}</span>
-          ]
+            <span>{record?.jd?.nickname}</span>,
+          ],
         },
         {
           title: "更新时间",
@@ -47,7 +57,7 @@ export default class TaskInfo extends React.Component {
           valueType: "option",
           width: 200,
           render: (text, record, _, action) => [
-            <a
+            <Button
               key="editable"
               onClick={() => {
                 console.log(record);
@@ -55,8 +65,9 @@ export default class TaskInfo extends React.Component {
               }}
             >
               编辑
-            </a>,
-            <a
+            </Button>,
+            <Button
+              danger
               key="delete"
               onClick={async () => {
                 let del = await deleteJdUserInfo([record.id]);
@@ -66,7 +77,7 @@ export default class TaskInfo extends React.Component {
               }}
             >
               删除
-            </a>,
+            </Button>,
           ],
         },
       ],
