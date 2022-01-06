@@ -40,6 +40,7 @@ class MyMenu extends React.Component {
           window.location.href = loginKey;
         }, 500);
       });
+      removeToken();
       return;
     } /*  else if (key === cleanCacheKey) {
       cleanCacheExceptLogin().then(resp => {

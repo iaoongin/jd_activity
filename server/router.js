@@ -4,6 +4,7 @@ const fs = require('fs');
 const auth = require('./auth.js');
 const express = require('express')
 const router = express.Router()
+const { authInfo, authCheck } = require("./service/metaAuthApi");
 
 
 function getErrorInfo(errorType) {
@@ -29,9 +30,9 @@ function writeErrorPage(response, errorType) {
   response.end();
 }
 
-function authCheck(request, response) {
+async function _authCheck(request, response) {
   var pathName = url.parse(request.url).pathname;
-
+  console.log(pathName)
   if (!pathName.startsWith('/api')) {
     return true;
   }
@@ -44,18 +45,34 @@ function authCheck(request, response) {
   // console.log('request.query: ', request.query)
   // console.log('token: ', token)
   // console.log('WebToken: ', auth.WebToken)
-  if (token != auth.WebToken) {
+
+  if(!token){
     writeErrorPage(response, 'NO_AUTH');
     return false;
   }
 
-  return true;
+  
+
+  let resp = await authCheck(token, pathName)
+  // console.log('authInfoResp: ', authInfoResp)
+
+  if(resp.data.code == 200){
+    // request.headers.token = token
+    return true;
+  }
+
+  // if (token != auth.WebToken) {
+    writeErrorPage(response, 'NO_AUTH');
+    return false;
+  // }
+
+  // return true;
 }
 
 
-router.use(function (request, response, next) {
+router.use(async function (request, response, next) {
   // auth check
-  if (!authCheck(request, response)) {
+  if (!await _authCheck(request, response)) {
     return;
   }
   next()
