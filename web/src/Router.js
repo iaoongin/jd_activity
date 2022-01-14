@@ -2,6 +2,7 @@ import React from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import JdUserInfo from "./pages/JdUserInfo";
 import JdTaskInfo from "./pages/JdTaskInfo";
+import BeanChart from "./pages/BeanChart";
 import { Row, Col } from "antd";
 import MyMenu from "./components/MyMenu";
 
@@ -17,6 +18,7 @@ const SubRoute = () => {
         <Route exact path="/" component={JdUserInfo} /> 
         <Route exact path="/userInfo" component={JdUserInfo} /> 
         <Route exact path="/taskInfo" component={JdTaskInfo} />
+        <Route exact path="/bean-chart" component={BeanChart} />
       </Col>
     </Row>
   );

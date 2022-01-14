@@ -1,4 +1,5 @@
 const axios = require("axios");
+const router = require("../router.js");
 
 axios.defaults.headers.common = {
   Accept: "application/json,text/plain, */*",
@@ -15,16 +16,21 @@ module.exports.queryJdUserInfo = async (cookie) => {
   return await axios.get(
     "https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2",
     {
-        headers: {Cookie: cookie}
+      headers: { Cookie: cookie },
     }
   );
 };
 
-module.exports.queryJdBeanChange = async (cookie) => {
+module.exports.queryJdBeanChange = async (cookie, page = 1, pageSize = 20) => {
   return await axios.get(
-    "https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail",
+    "https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail&appid=ld&" +
+      `body=${escape(
+        JSON.stringify({ pageSize: pageSize.toString(), page: page.toString() })
+      )}`,
     {
-        headers: {Cookie: cookie}
+      headers: {
+        Cookie: cookie,
+      },
     }
   );
 };

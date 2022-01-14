@@ -87,6 +87,9 @@ class MyMenu extends React.Component {
         <Menu.Item key="/#/userInfo" icon={<UnorderedListOutlined />}>
           用户列表
         </Menu.Item>
+        <Menu.Item key="/#/bean-chart" icon={<UnorderedListOutlined />}>
+          京豆走势图
+        </Menu.Item>
         <SubMenu
           title={
             <span className="submenu-title-wrapper">
