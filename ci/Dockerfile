@@ -5,8 +5,11 @@ ADD . /opt/app
 
 WORKDIR /opt/app
 
-RUN bash -c 'touch runServer.sh'
+RUN npm config set registry http://registry.npm.taobao.org
 
-ENTRYPOINT ["sh","runServer.sh"]
+RUN npm install
+
+# server
+RUN node server/server.js
 
 EXPOSE 3000
