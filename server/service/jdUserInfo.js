@@ -116,17 +116,22 @@ router.delete("/api/jdUserInfo", async (request, response) => {
 });
 
 /**
- *  查询jd用户信息
+ *  查询jd用户京豆信息
  */
-router.get("/api/jdBeanChange", async (request, response) => {
+router.get("/api/jdBeanBalance/chart", async (request, response) => {
+  var { days } = request.params;
+  if (!days) {
+    days = 7;
+  }
+
   let data = await loadData();
   let jd_token = data.jd_token;
   // console.log(jd_token);
-  let arr = [];
+  let dataObj = [];
   for (let item of jd_token) {
+    // console.log(item)
     let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
-    let day = 7;
-    let resp = await queryJdBeanChange(cookie);
+    let page = 1;
     // console.log(resp);
     /**
      * {
@@ -135,30 +140,63 @@ router.get("/api/jdBeanChange", async (request, response) => {
                 "eventMassage": "PLUS会员购物10倍返京豆（商品:100012553293）"
             }
      */
-    let detailList = resp.data.detailList;
-    // var t_dt = lodash.groupBy(detailList, (item) =>
-    //   moment(item.date).format("YYYY-MM-DD")
-    // );
+    let duration = 0;
+    let detailList = [];
+    let maxDate = null;
+    while (duration < days) {
+      let t_resp = await queryJdBeanChange(cookie, page, 20);
+      let t_detailList = t_resp.data.detailList;
+      let minDate = lodash.minBy(
+        t_detailList,
+        (item) => new Date(item.date)
+      ).date;
+      maxDate = maxDate
+        ? maxDate
+        : lodash.maxBy(t_detailList, (item) => new Date(item.date)).date;
 
-    var t_dt = lodash.map(detailList, (item) => {
-      return {
-        date: moment(item.date).format("YYYY-MM-DD"),
-        amount: item.amount,
-      };
-    });
+      // console.log('minDate', minDate);
+      // console.log('maxDate', maxDate);
 
-    console.log(t_dt);
+      duration = moment
+        .duration(new Date(maxDate).getTime() - new Date(minDate).getTime())
+        .days();
+      // console.log('duration', duration);
 
-    t_dt = lodash.countBy(t_dt, (sum, item) =>{
-      return sum += item.amount
-    })
+      detailList.push(...t_detailList);
 
-    console.log(t_dt);
+      page++;
+    }
 
-    arr.push(t_dt);
+    // console.log(minDate);
+    // console.log(maxDate);
+    // console.log(detailList);
+
+    var t_dt = lodash
+      .chain(detailList)
+      .groupBy((item) => moment(item.date).format("YYYY-MM-DD"))
+      .map((v, k) => {
+        return lodash.reduce(v, (r, c) => {
+          return {
+            name: item.pt_pin,
+            date: k,
+            amount: (r.amount = Number(r.amount) + Number(c.amount)),
+          };
+        });
+      })
+      .value();
+    // console.log(t_dt);
+
+    dataObj.push(...t_dt);
   }
 
-  var r = { data: arr, code: "200" };
+  let minTime = new Date(
+    moment().subtract(days, "days").format("YYYY-MM-DD")
+  ).getTime();
+  dataObj = dataObj.filter(
+    (e) => new Date(moment(e.date).format("YYYY-MM-DD")).getTime() > minTime
+  );
+
+  var r = { data: dataObj, code: "200" };
   response.json(r);
   response.end();
 });

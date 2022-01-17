@@ -15,8 +15,8 @@ const SubRoute = () => {
         xxl={{ span: 18, offset: 3 }}
       >
         <MyMenu />
-        <Route exact path="/" component={JdUserInfo} /> 
-        <Route exact path="/userInfo" component={JdUserInfo} /> 
+        <Route exact path="/" component={JdUserInfo} />
+        <Route exact path="/userInfo" component={JdUserInfo} />
         <Route exact path="/taskInfo" component={JdTaskInfo} />
         <Route exact path="/bean-chart" component={BeanChart} />
       </Col>
@@ -24,7 +24,7 @@ const SubRoute = () => {
   );
 };
 
-const BasicRoute = props => (
+const BasicRoute = (props) => (
   <HashRouter>
     <Switch>
       <Route path="/" component={SubRoute} />
