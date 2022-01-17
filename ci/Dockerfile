@@ -1,8 +1,8 @@
 FROM node:10
 
-WORKDIR /opt/app
+COPY . /opt/app
 
-COPY . .
+WORKDIR /opt/app
 
 CMD [ "sh", "runServer.sh" ]
 
