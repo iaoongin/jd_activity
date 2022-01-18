@@ -17,4 +17,4 @@ RUN npm install
 # server
 CMD [ "node", "server/server.js" ]
 
-EXPOSE 3000
+EXPOSE 3001
