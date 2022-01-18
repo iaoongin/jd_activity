@@ -1,5 +1,10 @@
 FROM node:10
+
+USER root
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
 
 WORKDIR /opt/app
 
