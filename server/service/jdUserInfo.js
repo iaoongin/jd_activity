@@ -146,6 +146,9 @@ router.get("/api/jdBeanBalance/chart", async (request, response) => {
     while (duration < days) {
       let t_resp = await queryJdBeanChange(cookie, page, 20);
       let t_detailList = t_resp.data.detailList;
+      if (!t_detailList) {
+        break;
+      }
       let minDate = lodash.minBy(
         t_detailList,
         (item) => new Date(item.date)

@@ -16,7 +16,7 @@ let base =
   process.env.NODE_ENV == "production" ? process.env.REACT_APP_SERVICE_URL : "";
 
 axios.defaults.baseURL = base;
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 30000
 
 // 请求前拦截
 axios.interceptors.request.use(
