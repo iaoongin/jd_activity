@@ -126,6 +126,7 @@ async function jdPet() {
       }
       $.taskInfo = $.taskInit.result;
 
+      submitCode(); // 提交助力码
       await petSport();//遛弯
       await slaveHelp();//助力好友
       await masterHelpInit();//获取助力的信息
@@ -450,53 +451,55 @@ async function showMsg() {
     $.log(`\n${message}\n`);
   }
 }
-// function readShareCode() {
-//   return new Promise(async resolve => {
-//     $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=pet&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
-//       try {
-//         if (err) {
-//           console.log(`${JSON.stringify(err)}`)
-//           console.log(`${$.name} API请求失败，请检查网路重试`)
-//         } else {
-//           if (data) {
-//             console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-//             data = JSON.parse(data);
-//           }
-//         }
-//       } catch (e) {
-//         $.logErr(e, resp)
-//       } finally {
-//         resolve(data);
-//       }
-//     })
-//     await $.wait(10000);
-//     resolve()
-//   })
-// }
-//提交互助码
-// function submitCode() {
-//   return new Promise(async resolve => {
-//   $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.petInfo.shareCode}&type=pet`, timeout: 10000}, (err, resp, data) => {
-//     try {
-//       if (err) {
-//         console.log(`${JSON.stringify(err)}`)
-//         console.log(`${$.name} API请求失败，请检查网路重试`)
-//       } else {
-//         if (data) {
-//           //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-//           data = JSON.parse(data);
-//         }
-//       }
-//     } catch (e) {
-//       $.logErr(e, resp)
-//     } finally {
-//       resolve(data);
-//     }
-//   })
-//   await $.wait(15000);
-//   resolve()
-//   })
-// }
+
+// 读取助力码
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=pet&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(10000);
+    resolve()
+  })
+}
+// 提交互助码
+function submitCode() {
+  return new Promise(async resolve => {
+  $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.petInfo.shareCode}&type=pet`, timeout: 10000}, (err, resp, data) => {
+    try {
+      if (err) {
+        console.log(`${JSON.stringify(err)}`)
+        console.log(`${$.name} API请求失败，请检查网路重试`)
+      } else {
+        if (data) {
+          //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+          data = JSON.parse(data);
+        }
+      }
+    } catch (e) {
+      $.logErr(e, resp)
+    } finally {
+      resolve(data);
+    }
+  })
+  await $.wait(15000);
+  resolve()
+  })
+}
 function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
@@ -509,7 +512,7 @@ function shareCodesFormat() {
       newShareCodes = shareCodes[tempIndex].split('@');
     }
     //因好友助力功能下线。故暂时屏蔽
-    // const readShareCodeRes = await readShareCode();
+    const readShareCodeRes = await readShareCode();
     // //const readShareCodeRes = null;
     // if (readShareCodeRes && readShareCodeRes.code === 200) {
     //   newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
