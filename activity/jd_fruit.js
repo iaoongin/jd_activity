@@ -1119,6 +1119,11 @@ async function farmAssistInit() {
   const functionId = arguments.callee.name.toString();
   $.farmAssistResult = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
 }
+//新版领取助力奖励API
+async function receiveStageEnergy() {
+  const functionId = arguments.callee.name.toString();
+  $.receiveStageEnergy = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+}
 //接受对方邀请,成为对方好友的API
 async function inviteFriend() {
   $.inviteFriendRes = await request(`initForFarm`, {
