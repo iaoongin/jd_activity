@@ -73,7 +73,9 @@ axios.interceptors.response.use(
     } else if (code == "401" || code == "401000") {
       console.log("登录信息失效⊙﹏⊙∥");
       message.error("登录信息失效⊙﹏⊙∥");
-      const loginUrl = resp.data.data.loginUrl;
+      // const loginUrl = resp.data.data.loginUrl;
+      // console.log(HOST)
+      const loginUrl = HOST.AUTH_LOGIN;
       let currentHref = window.location.href;
       if (getUrlParam(TOKEN_KEY)) {
         currentHref = urlParamDel(currentHref, TOKEN_KEY);

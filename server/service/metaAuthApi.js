@@ -7,11 +7,13 @@ async function getConfigStr(){
     console.log('loading config ...')
 
     let configResp = await axios.get(
-      "https://gitee.com/iaoongin/meta-config/raw/main/web/config.js"
+      "https://gitee.com/iaoongin/meta-config/raw/main/web/config.js", {
+        headers: []
+      }
     );
     configStr = configResp.data;
 
-    console.log(configStr)
+    // console.log(configStr)
   }
 
   return configStr

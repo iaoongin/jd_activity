@@ -30,6 +30,10 @@ router.get("/api/jdUserInfo", async (request, response) => {
     let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
     let resp = await queryJdUserInfo(cookie);
     // console.log(resp);
+    console.log(resp.data.base.nickname);
+    if(!resp.data.base.nickname){
+      console.log(resp)
+    }
     encryptKey(item);
     item.jd = resp.data.base;
   }

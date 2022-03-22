@@ -19,6 +19,11 @@ function writeErrorPage(response, errorType) {
     response.end();
     return
   } else if (errorType === 'NO_AUTH') {
+    var r = { msg: errorType, code: "401" };
+    response.json(r);
+    response.end();
+    return
+  } else if (errorType === 'Forbidden') {
     var r = { msg: errorType, code: "403" };
     response.json(r);
     response.end();
@@ -59,6 +64,9 @@ async function _authCheck(request, response) {
   if(resp.data.code == 200){
     // request.headers.token = token
     return true;
+  }else if(resp.data.code == 403){
+    writeErrorPage(response, 'Forbidden');
+    return false;
   }
 
   // if (token != auth.WebToken) {
