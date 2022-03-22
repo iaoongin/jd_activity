@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { EditableProTable } from "@ant-design/pro-table";
+import { CheckCircleOutlined , CloseCircleOutlined } from "@ant-design/icons";
 import {
   getJdUserInfo,
   updateJdUserInfo,
@@ -33,7 +34,10 @@ export default class TaskInfo extends React.Component {
           render: (text, record, _, action) => {
             let valid = !!record?.jd?.nickname;
             // console.log(valid);
-            return <span>{valid + ""}</span>;
+            if(valid){
+              return <CheckCircleOutlined  style={{'color': 'green', 'fontSize': '1.2rem'}}/>
+            }
+            return <CloseCircleOutlined  style={{'color': 'red', 'fontSize': '1.2rem'}}/>
           },
         },
         {
