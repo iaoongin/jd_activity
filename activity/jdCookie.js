@@ -26,7 +26,7 @@
     // console.log(data);
     let jd_token = data.jd_token;
     for (let item of jd_token) {
-      CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin}`);
+      CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin};`);
     }
   }
 

@@ -35,3 +35,14 @@ export JD_ACTIVITY_GIST_TOKEN=xxx
 ```bash
 ./stop.sh
 ```
+
+# 参考仓库
+
+```
+https://github.com/zero205/JD_tencent_scf
+
+- https://github.com/curtinlv/JD-Script
+- https://github.com/Hyper-Beast/JD_Scripts
+- https://github.com/Aaron-lv/sync
+- https://github.com/utterliar1/jd_scripts
+```
