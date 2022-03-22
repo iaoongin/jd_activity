@@ -20,7 +20,6 @@
     "octokit": "^1.7.0",
     "png-js": "^1.0.0",
     "promises": "^0.2.5",
-    "request": "^2.88.2",
     "supervisor": "^0.12.0",
     "tough-cookie": "^4.0.0"
   },
