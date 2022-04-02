@@ -23,19 +23,26 @@ function encryptKey(item) {
  *  查询jd用户信息
  */
 router.get("/api/jdUserInfo", async (request, response) => {
+
+  // 判断是否获取额外信息。可用于异步获取，避免加载慢
+  let extra = req.query.extra
+
   let data = await loadData();
   let jd_token = data.jd_token;
   // console.log(jd_token);
-  for (let item of jd_token) {
-    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
-    let resp = await queryJdUserInfo(cookie);
-    // console.log(resp);
-    console.log(resp.data.base.nickname);
-    if(!resp.data.base.nickname){
-      console.log(resp)
+
+  if (extra) {
+    for (let item of jd_token) {
+      let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
+      let resp = await queryJdUserInfo(cookie);
+      // console.log(resp);
+      console.log(resp.data.base.nickname);
+      if (!resp.data.base.nickname) {
+        console.log(resp)
+      }
+      encryptKey(item);
+      item.jd = resp.data.base;
     }
-    encryptKey(item);
-    item.jd = resp.data.base;
   }
 
   var r = { data: jd_token, code: "200" };
