@@ -120,11 +120,20 @@ export default class TaskInfo extends React.Component {
   }
 
   componentDidMount() {
+    var that = this
     getJdUserInfo().then((resp) => {
       console.log(resp);
       let data = resp.data;
       this.setState({ data: this.formatData(data) });
     });
+
+    setTimeout(() => {
+      getJdUserInfo().then((resp) => {
+        console.log(resp);
+        let data = resp.data;
+        that.setState({ data: that.formatData(data) });
+      });
+    }, 500);
   }
 
   formatData(data) {
