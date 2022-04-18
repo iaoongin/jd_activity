@@ -1319,7 +1319,8 @@ function timeFormat(time) {
 // 读取助力码
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=farm&num=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
+    // $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=farm&num=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
+    $.get({url: `https://api.jdsharecode.xyz/api/farm/${randomCount}`, timeout: 10000,}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -1343,7 +1344,9 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
   return new Promise(async resolve => {
-  $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.farmInfo.farmUserPro.shareCode}&type=farm`, timeout: 10000}, (err, resp, data) => {
+    
+  // $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.farmInfo.farmUserPro.shareCode}&type=farm`, timeout: 10000}, (err, resp, data) => {
+  $.get({url: `https://api.jdsharecode.xyz/api/runTimes?activityId=farm&sharecode=${$.farmInfo.farmUserPro.shareCode}`, timeout: 10000}, (err, resp, data) => {
     try {
       if (err) {
         console.log(`${JSON.stringify(err)}`)
