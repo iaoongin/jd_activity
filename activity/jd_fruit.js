@@ -30,7 +30,8 @@ let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, n
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [ // 这个列表填入你要助力的好友的shareCode
   //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  ''
+  '66e262037c8043d48d6f889a97638774@2aa0f55de42148aa8c907eea6d561ccf',
+  '66e262037c8043d48d6f889a97638774@2aa0f55de42148aa8c907eea6d561ccf',
 ]
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
@@ -1369,7 +1370,7 @@ function submitCode() {
 }
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
+    console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     newShareCodes = [];
     if ($.shareCodesArr[$.index - 1]) {
       newShareCodes = $.shareCodesArr[$.index - 1].split('@');
