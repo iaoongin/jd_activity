@@ -1,9 +1,10 @@
 import http from "../utils/requests";
 
-export function getJdUserInfo() {
+export function getJdUserInfo(params) {
     return http.axios({
         url: '/api/jdUserInfo',
-        method: 'get'
+        method: 'get',
+        params: params
     })
 }
 

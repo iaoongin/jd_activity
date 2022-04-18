@@ -25,7 +25,7 @@ function encryptKey(item) {
 router.get("/api/jdUserInfo", async (request, response) => {
 
   // 判断是否获取额外信息。可用于异步获取，避免加载慢
-  let extra = req.query.extra
+  let extra = request.query.extra
 
   let data = await loadData();
   let jd_token = data.jd_token;
