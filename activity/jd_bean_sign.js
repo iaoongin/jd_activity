@@ -184,6 +184,9 @@ async function download() {
               console.log(`JD_DailyBonus.js文件 CDN刷新失败`)
             }
           }
+        }).catch(e=>{
+          console.error(`CDN pure err:${JSON.stringify(err)}`)
+          resolve()
         })
         options['url'] = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js'
         await $.get(options, async (err, resp, data) => {
