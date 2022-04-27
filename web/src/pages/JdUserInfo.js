@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { EditableProTable } from "@ant-design/pro-table";
-import { CheckCircleOutlined , CloseCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import {
   getJdUserInfo,
   updateJdUserInfo,
@@ -14,6 +14,7 @@ export default class TaskInfo extends React.Component {
     this.state = {
       data: [],
       editableKeys: [],
+      fetchExtra: false,
       columns: [
         {
           title: "pt_pin",
@@ -34,10 +35,15 @@ export default class TaskInfo extends React.Component {
           render: (text, record, _, action) => {
             let valid = !!record?.jd?.nickname;
             // console.log(valid);
-            if(valid){
-              return <CheckCircleOutlined  style={{'color': 'green', 'fontSize': '1.2rem'}}/>
+            if (this.state.fetchExtra) {
+              if (valid) {
+                return <CheckCircleOutlined style={{ 'color': 'green', 'fontSize': '1.2rem' }} />
+              }
+              return <CloseCircleOutlined style={{ 'color': 'red', 'fontSize': '1.2rem' }} />
+            } else {
+              return <QuestionCircleOutlined style={{ 'color': 'gray', 'fontSize': '1.2rem' }} />
             }
-            return <CloseCircleOutlined  style={{'color': 'red', 'fontSize': '1.2rem'}}/>
+
           },
         },
         {
@@ -128,10 +134,13 @@ export default class TaskInfo extends React.Component {
     });
 
     setTimeout(() => {
-      getJdUserInfo({extra: 1}).then((resp) => {
+      getJdUserInfo({ extra: 1 }).then((resp) => {
         console.log(resp);
         let data = resp.data;
-        that.setState({ data: that.formatData(data) });
+        that.setState({
+          data: that.formatData(data),
+          fetchExtra: true
+        });
       });
     }, 500);
   }
