@@ -31,18 +31,23 @@ router.get("/api/jdUserInfo", async (request, response) => {
   let jd_token = data.jd_token;
   // console.log(jd_token);
 
-  if (extra) {
-    for (let item of jd_token) {
+
+  for (let item of jd_token) {
+
+    if (extra) {
+
       let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
       let resp = await queryJdUserInfo(cookie);
       // console.log(resp);
-      console.log(resp.data.base.nickname);
+      console.log(resp?.data?.base?.nickname);
       if (!resp.data.base.nickname) {
         console.log(resp)
       }
-      encryptKey(item);
       item.jd = resp.data.base;
     }
+
+    encryptKey(item);
+    
   }
 
   var r = { data: jd_token, code: "200" };
