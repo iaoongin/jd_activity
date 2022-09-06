@@ -7,7 +7,7 @@ import {
   HttpHeaderAuthorization,
   TOKEN_KEY,
 } from "./auth";
-import { getUrlParam, urlParamDel } from "./urls";
+import { getUrlParam, urlParamDel, getParam, hashParamDel } from "./urls";
 import { hideLoading, showLoading } from "../store";
 
 import lodash from "lodash";
@@ -16,12 +16,14 @@ let base =
   process.env.NODE_ENV == "production" ? process.env.REACT_APP_SERVICE_URL : "";
 
 axios.defaults.baseURL = base;
+axios.defaults.timeout = 30000
 
 // 请求前拦截
 axios.interceptors.request.use(
   (config) => {
     showLoading();
-    let token = getUrlParam(TOKEN_KEY);
+    let token = getParam(window.location.href, TOKEN_KEY);
+    console.log(token);
     if (token) {
       localStorage.setItem(TOKEN_KEY, token);
 
@@ -32,6 +34,21 @@ axios.interceptors.request.use(
       token = localStorage.getItem(TOKEN_KEY);
     }
     // debugger
+
+    if (!token && token != "null") {
+      if (!promptFlag) {
+        promptFlag = true;
+        if (confirm("去登陆")) {
+          window.location.href =
+            HOST.AUTH_LOGIN +
+            "?redirectUrl=" +
+            encodeURIComponent(window.location.href);
+        } else {
+          hideLoading();
+        }
+        promptFlag = false;
+      }
+    }
 
     config.headers.common[HttpHeaderAuthorization] = TOKEN_PREFIX + token;
     return config;
@@ -56,7 +73,9 @@ axios.interceptors.response.use(
     } else if (code == "401" || code == "401000") {
       console.log("登录信息失效⊙﹏⊙∥");
       message.error("登录信息失效⊙﹏⊙∥");
-      const loginUrl = resp.data.data.loginUrl;
+      // const loginUrl = resp.data.data.loginUrl;
+      // console.log(HOST)
+      const loginUrl = HOST.AUTH_LOGIN;
       let currentHref = window.location.href;
       if (getUrlParam(TOKEN_KEY)) {
         currentHref = urlParamDel(currentHref, TOKEN_KEY);
@@ -68,14 +87,14 @@ axios.interceptors.response.use(
       window.location.href = newHref;
       return Promise.reject("登录信息失效⊙﹏⊙∥");
     } else if (code == "403") {
-      if(!promptFlag){
-        promptFlag = true;
-        let iptToken = window.prompt("请输入token");
-        localStorage.setItem("token", iptToken);
-        promptFlag = false
-        window.location.reload();
-      }
-      
+      message.error("没有权限⊙﹏⊙∥");
+      // if (!promptFlag) {
+      //   promptFlag = true;
+      //   let iptToken = window.prompt("请输入token");
+      //   localStorage.setItem("token", iptToken);
+      //   promptFlag = false;
+      //   window.location.reload();
+      // }
     } else {
       message.error(msg);
       return Promise.reject(msg);

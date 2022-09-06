@@ -11,5 +11,5 @@ export function setToken(token) {
 }
 
 export function removeToken() {
-    return localStorage.setItem(TOKEN_KEY, null)
+    return localStorage.removeItem(TOKEN_KEY)
 }

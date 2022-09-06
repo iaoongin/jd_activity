@@ -1,36 +1,53 @@
 const { loadData, updateData } = require("../gists.js");
 const router = require("../router.js");
 const { now } = require("../utils/date.js");
-const { queryJdUserInfo } = require("./jdApi");
+const { queryJdUserInfo, queryJdBeanChange } = require("./jdApi");
+const moment = require("moment");
+const lodash = require("lodash");
 
 function encryptKey(item) {
   let key = item.pt_key;
   let keyLen = key.length;
   let showLen = 5;
-  let encryptKey = ""
+  let encryptKey = "";
   encryptKey = key.substring(0, showLen);
   for (let i = 0; i < keyLen - 2 * showLen; i++) {
     encryptKey += "*";
   }
   encryptKey += key.substring(key.length - showLen);
 
-  item.pt_key = encryptKey
-  
+  item.pt_key = encryptKey;
 }
 
 /**
  *  查询jd用户信息
  */
 router.get("/api/jdUserInfo", async (request, response) => {
+
+  // 判断是否获取额外信息。可用于异步获取，避免加载慢
+  let extra = request.query.extra
+
   let data = await loadData();
   let jd_token = data.jd_token;
   // console.log(jd_token);
+
+
   for (let item of jd_token) {
-    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
-    let resp = await queryJdUserInfo(cookie);
-    // console.log(resp);
-    encryptKey(item)
-    item.jd = resp.data.base;
+
+    if (extra) {
+
+      let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
+      let resp = await queryJdUserInfo(cookie);
+      // console.log(resp);
+      console.log(resp?.data?.base?.nickname);
+      if (!resp.data.base.nickname) {
+        console.log(resp)
+      }
+      item.jd = resp.data.base;
+    }
+
+    encryptKey(item);
+    
   }
 
   var r = { data: jd_token, code: "200" };
@@ -74,7 +91,6 @@ router.post("/api/jdUserInfo", async (request, response) => {
         pt_key: item.pt_key,
       });
     }
-
   }
 
   //   console.log("new", data);
@@ -82,8 +98,8 @@ router.post("/api/jdUserInfo", async (request, response) => {
   dataForSave.jd_token = data;
   updateData(dataForSave);
 
-  for(let item of data){
-    encryptKey(item)
+  for (let item of data) {
+    encryptKey(item);
   }
 
   var r = { data: data, code: "200" };
@@ -108,9 +124,98 @@ router.delete("/api/jdUserInfo", async (request, response) => {
   updateData(dataForSave);
 
   var r = { data: newJdToken, code: "200" };
-  for(let item of data){
-    encryptKey(item)
+  for (let item of data) {
+    encryptKey(item);
   }
+  response.json(r);
+  response.end();
+});
+
+/**
+ *  查询jd用户京豆信息
+ */
+router.get("/api/jdBeanBalance/chart", async (request, response) => {
+  var { days } = request.params;
+  if (!days) {
+    days = 7;
+  }
+
+  let data = await loadData();
+  let jd_token = data.jd_token;
+  // console.log(jd_token);
+  let dataObj = [];
+  for (let item of jd_token) {
+    // console.log(item)
+    let cookie = `pt_pin=${item.pt_pin};pt_key=${item.pt_key};`;
+    let page = 1;
+    // console.log(resp);
+    /**
+     * {
+                "date": "2022-01-14 11:49:50",
+                "amount": "32",
+                "eventMassage": "PLUS会员购物10倍返京豆（商品:100012553293）"
+            }
+     */
+    let duration = 0;
+    let detailList = [];
+    let maxDate = null;
+    while (duration < days) {
+      let t_resp = await queryJdBeanChange(cookie, page, 20);
+      let t_detailList = t_resp.data.detailList;
+      if (!t_detailList) {
+        break;
+      }
+      let minDate = lodash.minBy(
+        t_detailList,
+        (item) => new Date(item.date)
+      ).date;
+      maxDate = maxDate
+        ? maxDate
+        : lodash.maxBy(t_detailList, (item) => new Date(item.date)).date;
+
+      // console.log('minDate', minDate);
+      // console.log('maxDate', maxDate);
+
+      duration = moment
+        .duration(new Date(maxDate).getTime() - new Date(minDate).getTime())
+        .days();
+      // console.log('duration', duration);
+
+      detailList.push(...t_detailList);
+
+      page++;
+    }
+
+    // console.log(minDate);
+    // console.log(maxDate);
+    // console.log(detailList);
+
+    var t_dt = lodash
+      .chain(detailList)
+      .groupBy((item) => moment(item.date).format("YYYY-MM-DD"))
+      .map((v, k) => {
+        return lodash.reduce(v, (r, c) => {
+          return {
+            name: item.pt_pin,
+            date: k,
+            amount: (r.amount = Number(r.amount) + Number(c.amount)),
+          };
+        });
+      })
+      .value();
+    // console.log(t_dt);
+
+    dataObj.push(...t_dt);
+  }
+
+  let minTime = new Date(
+    moment().subtract(days, "days").format("YYYY-MM-DD")
+  ).getTime();
+  dataObj = dataObj.filter(
+    (e) => new Date(moment(e.date).format("YYYY-MM-DD")).getTime() > minTime
+  );
+
+  var r = { data: dataObj, code: "200" };
   response.json(r);
   response.end();
 });

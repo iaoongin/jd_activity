@@ -6,3 +6,10 @@ export function getJdTaskInfo() {
         method: 'get'
     })
 }
+export function exec(data) {
+    return http.axios({
+        url: '/api/jdTaskInfo/exec',
+        data: data,
+        method: 'post'
+    })
+}

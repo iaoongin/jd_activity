@@ -95,18 +95,19 @@ if ($.isNode()) {
 
 function changeFile (content,cookie) {
   console.log(`开始替换变量`)
-  let newContent = content.replace(/var OtherKey = '.*'/, `var OtherKey = '${cookie}'`);
+  console.log(cookie)
+  let newContent = content.replace(/var OtherKey = `.*`/, `var OtherKey = \`${cookie}\``);
   // newContent = content.replace(/var LogDetails = false; '.*'/, `var LogDetails = true;`);
   // newContent = newContent.replace(/const NodeSet = 'CookieSet.json'/, `const NodeSet = '${NodeSet}'`)
-  if (process.env.JD_BEAN_STOP && process.env.JD_BEAN_STOP !== '0') {
-    newContent = newContent.replace(/var stop = '0'/, `var stop = '${process.env.JD_BEAN_STOP}'`)
-  }
+  // if (process.env.JD_BEAN_STOP && process.env.JD_BEAN_STOP !== '0') {
+  //   newContent = newContent.replace(/var stop = '0'/, `var stop = '${process.env.JD_BEAN_STOP}'`)
+  // }
   const zone = new Date().getTimezoneOffset()
   if (zone === 0) {
     //此处针对UTC-0时区用户做的
     newContent = newContent.replace(/tm\s=.*/, `tm = new Date(new Date().toLocaleDateString()).getTime() - 28800000;`)
   }
-  // console.log(newContent.substr(0, 1000))
+  console.log(newContent.substr(1000, 1000))
   // return null;
   return newContent
 }
@@ -154,7 +155,7 @@ function TotalBean(cookie) {
 }
 async function download() {
   return new Promise(resolve => {
-    const options = { 'url':'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js', "timeout": 1000 };
+    const options = { 'url':'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js', "timeout": 2000 };
     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
       const tunnel = require("tunnel");
       const agent = {
@@ -183,6 +184,9 @@ async function download() {
               console.log(`JD_DailyBonus.js文件 CDN刷新失败`)
             }
           }
+        }).catch(e=>{
+          console.error(`CDN pure err:${JSON.stringify(err)}`)
+          resolve()
         })
         options['url'] = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js'
         await $.get(options, async (err, resp, data) => {

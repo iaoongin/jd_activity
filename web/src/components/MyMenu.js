@@ -40,6 +40,7 @@ class MyMenu extends React.Component {
           window.location.href = loginKey;
         }, 500);
       });
+      removeToken();
       return;
     } /*  else if (key === cleanCacheKey) {
       cleanCacheExceptLogin().then(resp => {
@@ -85,6 +86,9 @@ class MyMenu extends React.Component {
         </Menu.Item>
         <Menu.Item key="/#/userInfo" icon={<UnorderedListOutlined />}>
           用户列表
+        </Menu.Item>
+        <Menu.Item key="/#/bean-chart" icon={<UnorderedListOutlined />}>
+          京豆走势图
         </Menu.Item>
         <SubMenu
           title={

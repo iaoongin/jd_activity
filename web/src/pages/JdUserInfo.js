@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { EditableProTable } from "@ant-design/pro-table";
+import { CheckCircleOutlined, CloseCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import {
   getJdUserInfo,
   updateJdUserInfo,
   deleteJdUserInfo,
 } from "../apis/jdUserInfo.js";
-import {Avatar} from 'antd'
+import { Avatar, Button } from "antd";
 
 export default class TaskInfo extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class TaskInfo extends React.Component {
     this.state = {
       data: [],
       editableKeys: [],
+      fetchExtra: false,
       columns: [
         {
           title: "pt_pin",
@@ -27,14 +29,32 @@ export default class TaskInfo extends React.Component {
           render: (_, record) => <code>{record.pt_key}</code>,
         },
         {
+          title: "有效",
+          editable: false,
+          width: "4%",
+          render: (text, record, _, action) => {
+            let valid = !!record?.jd?.nickname;
+            // console.log(valid);
+            if (this.state.fetchExtra) {
+              if (valid) {
+                return <CheckCircleOutlined style={{ 'color': 'green', 'fontSize': '1.2rem' }} />
+              }
+              return <CloseCircleOutlined style={{ 'color': 'red', 'fontSize': '1.2rem' }} />
+            } else {
+              return <QuestionCircleOutlined style={{ 'color': 'gray', 'fontSize': '1.2rem' }} />
+            }
+
+          },
+        },
+        {
           title: "用户",
           editable: false,
           width: "13%",
           render: (text, record, _, action) => [
             <Avatar size={32} src={record?.jd?.headImageUrl} />,
             <span>&nbsp;</span>,
-            <span>{record?.jd?.nickname}</span>
-          ]
+            <span>{record?.jd?.nickname}</span>,
+          ],
         },
         {
           title: "更新时间",
@@ -47,7 +67,7 @@ export default class TaskInfo extends React.Component {
           valueType: "option",
           width: 200,
           render: (text, record, _, action) => [
-            <a
+            <Button
               key="editable"
               onClick={() => {
                 console.log(record);
@@ -55,8 +75,9 @@ export default class TaskInfo extends React.Component {
               }}
             >
               编辑
-            </a>,
-            <a
+            </Button>,
+            <Button
+              danger
               key="delete"
               onClick={async () => {
                 let del = await deleteJdUserInfo([record.id]);
@@ -66,7 +87,7 @@ export default class TaskInfo extends React.Component {
               }}
             >
               删除
-            </a>,
+            </Button>,
           ],
         },
       ],
@@ -105,17 +126,30 @@ export default class TaskInfo extends React.Component {
   }
 
   componentDidMount() {
+    var that = this
     getJdUserInfo().then((resp) => {
       console.log(resp);
       let data = resp.data;
       this.setState({ data: this.formatData(data) });
     });
+
+    setTimeout(() => {
+      getJdUserInfo({ extra: 1 }).then((resp) => {
+        console.log(resp);
+        let data = resp.data;
+        that.setState({
+          data: that.formatData(data),
+          fetchExtra: true
+        });
+      });
+    }, 500);
   }
 
   formatData(data) {
     data.map((x) => {
       x.key = x.pt_pin;
       x.id = x.pt_pin;
+      return x;
     });
 
     return data;
