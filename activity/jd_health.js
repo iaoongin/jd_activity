@@ -23,7 +23,7 @@ const $ = new Env("东东健康社区");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require('./sendNotify') : "";
 let cookiesArr = [], cookie = "", allMessage = "", message;
-const inviteCodes = []
+const inviteCodes = [""]
 const ZLC = !(process.env.JD_JOIN_ZLC && process.env.JD_JOIN_ZLC === 'false')
 let reward = process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : ''
 const JD_ZLC_URL=process.env.JD_ZLC_URL?process.env.JD_ZLC_URL:"http://zlc1.chaoyi996.com:8880";
