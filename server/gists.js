@@ -8,12 +8,13 @@ const { JSDOM } = jsdom;
 const { window } = new JSDOM(`<!DOCTYPE html>`);
 const $ = require("jquery")(window);
 
+const fileName = "jd_activity.json";
 module.exports.loadData = async () => {
   let gistResp = await octokit.request("GET /gists/{gist_id}", {
     gist_id: auth.GistId,
   });
 
-  let data = JSON.parse(gistResp.data.files["jd_activity.json"].content);
+  let data = JSON.parse(gistResp.data.files[fileName].content);
 
   return data;
 };
@@ -30,7 +31,7 @@ module.exports.loadDataSync = () => {
 
   let gistResp = ajaxResp.responseJSON;
 
-  let data = JSON.parse(gistResp.files["jd_activity.json"].content);
+  let data = JSON.parse(gistResp.files[fileName].content);
 
   return data;
 };
@@ -40,7 +41,7 @@ module.exports.loadData = async () => {
     gist_id: auth.GistId,
   });
 
-  let data = JSON.parse(gistResp.data.files["jd_activity.json"].content);
+  let data = JSON.parse(gistResp.data.files[fileName].content);
 
   return data;
 };
@@ -51,7 +52,7 @@ module.exports.updateData = async (data) => {
   let gistResp = await octokit.request("PATCH /gists/{gist_id}", {
     gist_id: auth.GistId,
     files: {
-      "jd_activity.json": {
+      fileName: {
         content: JSON.stringify(data),
       },
     },
