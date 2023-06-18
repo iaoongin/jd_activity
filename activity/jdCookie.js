@@ -1,4 +1,5 @@
-/* async */ (() => {
+/* async */
+(() => {
   /*
 此文件为Node.js专用。其他用户请忽略
  */
@@ -18,9 +19,13 @@
     } else {
       CookieJDs = [process.env.JD_COOKIE];
     }
+  } else if (hasJDCookieSlashEnv()) {
+    CookieJDs = readJdCookies()
   } else {
     // 从gist 拉取
-    const { loadDataSync } = require("../server/gists.js");
+    const {
+      loadDataSync
+    } = require("../server/gists.js");
 
     let data = loadDataSync();
     // console.log(data);
@@ -29,6 +34,8 @@
       CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin};`);
     }
   }
+
+  CookieJDs = readJdCookies()
 
   console.log(CookieJDs);
 
@@ -59,4 +66,27 @@
     const index = i + 1 === 1 ? "" : i + 1;
     exports["CookieJD" + index] = CookieJDs[i].trim();
   }
+
+  function hasJDCookieSlashEnv() {
+    for (let envName in process.env) {
+      if (envName.startsWith('JD_COOKIE_')) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  function readJdCookies() {
+    const jdCookies = [];
+
+    for (const [key, value] of Object.entries(process.env)) {
+      if (key.startsWith('JD_COOKIE_')) {
+        jdCookies.push(value.trim());
+      }
+    }
+
+    return jdCookies;
+  }
+
 })();
