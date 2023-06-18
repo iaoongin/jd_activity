@@ -81,8 +81,9 @@
     const jdCookies = [];
 
     for (const [key, value] of Object.entries(process.env)) {
-      if (key.startsWith('JD_COOKIE_')) {
-        jdCookies.push(value.trim());
+      if (key.startsWith('JD_COOKIE_') && value.indexOf(';') == -1) {
+        const pt_pin = key.replace('JD_COOKIE_', '');
+        jdCookies.push(`pt_pin=${pt_pin.trim()};pt_key=${value.trim()}`);
       }
     }
 
