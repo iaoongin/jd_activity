@@ -306,7 +306,7 @@ async function doDailyTask() {
 }
 async function predictionFruit() {
     console.log('开始预测水果成熟时间\n');
-    await initForFarm();
+    // await initForFarm();
     await taskInitForFarm();
     let waterEveryDayT = $.farmTask.totalWaterTaskInit.totalWaterTaskTimes;//今天到到目前为止，浇了多少次水
     message += `【今日共浇水】${waterEveryDayT}次\n`;
@@ -425,7 +425,7 @@ async function getTenWaterAward() {
 //再次浇水
 async function doTenWaterAgain() {
     console.log('开始检查剩余水滴能否再次浇水再次浇水\n');
-    await initForFarm();
+    // await initForFarm();
     let totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
     console.log(`剩余水滴${totalEnergy}g\n`);
     await myCardInfoForFarm();
@@ -437,7 +437,7 @@ async function doTenWaterAgain() {
             await userMyCardForFarm('doubleCard');
             console.log(`使用翻倍水滴卡结果:${JSON.stringify($.userMyCardRes)}`);
         }
-        await initForFarm();
+        // await initForFarm();
         totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
     }
     if (signCard > 0) {
@@ -446,7 +446,7 @@ async function doTenWaterAgain() {
             await userMyCardForFarm('signCard');
             console.log(`使用加签卡结果:${JSON.stringify($.userMyCardRes)}`);
         }
-        await initForFarm();
+        // await initForFarm();
         totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
     }
     jdFruitBeanCard = $.getdata('jdFruitBeanCard') ? $.getdata('jdFruitBeanCard') : jdFruitBeanCard;
