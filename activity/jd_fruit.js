@@ -760,7 +760,7 @@ async function getExtraAward() {
 }
 //助力好友
 async function masterHelpShare() {
-    await initForFarm();
+    // await initForFarm();
     let salveHelpAddWater = 0;
     let remainTimes = 3;//今日剩余助力次数,默认3次（京东农场每人每天3次助力机会）。
     let helpSuccessPeoples = '';//成功助力好友
