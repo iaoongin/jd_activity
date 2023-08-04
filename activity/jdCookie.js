@@ -35,8 +35,6 @@
     }
   }
 
-  CookieJDs = readJdCookies()
-
   console.log(CookieJDs);
 
   /*
