@@ -162,7 +162,7 @@ async function sendNotify(text, desp, params = {}) {
     qywxamNotify(text, desp), //企业微信应用消息推送
     iGotNotify(text, desp, params),//iGot
     //CoolPush(text, desp)//QQ酷推
-    wecomchanNotify(text, desp)
+    wecomchanNotify(text, desp) // wecomchan 消息推送
   ])
 }
 
@@ -170,6 +170,8 @@ async function sendNotify(text, desp, params = {}) {
 function wecomchanNotify(text, desp, timeout=2100) {
   return  new Promise(resolve => {
     if (WECOMCHAN_SEND_KEY) {
+      console.log('使用wecomchan推送消息通知\n');
+
       let msg = encodeURIComponent(text + "\n"+ desp)
       let url = `${WECOMCHAN_URL}?sendkey=${WECOMCHAN_SEND_KEY}&msg_type=text&msg=${msg}`
       // console.log(msg)
