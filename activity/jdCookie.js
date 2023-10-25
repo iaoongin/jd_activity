@@ -9,6 +9,7 @@
     "", //账号二ck,例:pt_key=XXX;pt_pin=XXX;如有更多,依次类推
   ];
   // 判断环境变量里面是否有京东ck
+  // console.log(`${JSON.stringify(process.env)}`)
   if (process.env.JD_COOKIE) {
     if (process.env.JD_COOKIE.indexOf("&") > -1) {
       console.log(`您的cookie选择的是用&隔开\n`);
@@ -17,22 +18,25 @@
       console.log(`您的cookie选择的是用换行隔开\n`);
       CookieJDs = process.env.JD_COOKIE.split("\n");
     } else {
+      console.log(`您的cookie选择的是单个账户`)
       CookieJDs = [process.env.JD_COOKIE];
     }
   } else if (hasJDCookieSlashEnv()) {
+    console.log(`您的cookie选择的是下划线格式`)
     CookieJDs = readJdCookies()
   } else {
     // 从gist 拉取
-    const {
-      loadDataSync
-    } = require("../server/gists.js");
+    console.log(`您的cookie选择的是从gist拉取，暂时取消实现`)
+    // const {
+    //   loadDataSync
+    // } = require("../server/gists.js");
 
-    let data = loadDataSync();
-    // console.log(data);
-    let jd_token = data.jd_token;
-    for (let item of jd_token) {
-      CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin};`);
-    }
+    // let data = loadDataSync();
+    // // console.log(data);
+    // let jd_token = data.jd_token;
+    // for (let item of jd_token) {
+    //   CookieJDs.push(`pt_key=${item.pt_key};pt_pin=${item.pt_pin};`);
+    // }
   }
 
   console.log(CookieJDs);
