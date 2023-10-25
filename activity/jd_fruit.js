@@ -1419,7 +1419,8 @@ async function signForFarm() {
  */
 async function initForFarm() {
     const functionId = arguments.callee.name.toString();
-    $.farmInfo = await request(functionId, {"babelChannel":"121","sid":"3c52b5f17ab2a42398939a27887eaf8w","version":18,"channel":1});
+    // $.farmInfo = await request(functionId, {"babelChannel":"121","sid":"3c52b5f17ab2a42398939a27887eaf8w","version":18,"channel":1});
+    $.farmInfo = await request(functionId, {"babelChannel":"10","sid":"","version":24,"channel":1});
     // return new Promise(resolve => {
     //     const option = {
     //         url: `${JD_API_HOST}?functionId=initForFarm`,
@@ -1610,7 +1611,7 @@ function safeGet(data) {
 }
 function taskUrl(function_id, body = {}) {
     return {
-        url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
+                url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
         headers: {
             "Host": "api.m.jd.com",
             "Accept": "*/*",
